@@ -6,20 +6,19 @@ MongoClient.connect('mongodb://localhost:27017').then((client) => {
     console.log('connected MongoDB!');
 
     /**Insert */
-    insert(db);
+    // insert(db);
 
     /**fetch */
     // fetch(db,{});
     /**fetch completed TODOs */
-    // fetch(db, { completed: true });
+    fetch(db, { completed: true });
     // fetch(db, { _id: new ObjectId('5a6ffa09d5e7f41376507f05') });
 
     /**getCount */
-    getCount(db);
+    // getCount(db);
 
     /**Fetch from users collection */
-    getUser(db, { name: 'Ashish yadav' });
-
+    // getUser(db, { name: 'Ashish yadav' });
 
     client.close();
 }).catch((err) => {
@@ -60,8 +59,7 @@ var getUser = (db, obj) => {
     }).catch((err) => {
         console.log("Error in fetching", err);
     })
-}
-
+};
 
 /**WITHOUT PROMISE */
 /*
