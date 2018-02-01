@@ -1,5 +1,6 @@
 let express = require('express');
 let bodyParser = require('body-parser');
+let { ObjectId } = require('mongodb');
 
 let { mongoose } = require('./db/mongoose');
 let { Todo } = require('./models/todo');
@@ -30,6 +31,31 @@ app.get('/todos', (req, res) => {
     }, (err) => {
         res.status(400).send(err);
     })
+});
+
+app.get('/todos/:id/:text', (req, res) => {
+    console.log("PARAMS",req.params);
+    let id = req.params.id;
+    if (!ObjectId.isValid(id)) {
+        console.log(`Invalid ID found`, id);
+        return res.status(400).send({todo:[]});
+    }
+
+    Todo.findById(id).then((todo) => {
+        if (!todo) {
+            console.log(`fetched Todo by ID empty `, todo);
+
+            return res.status(200).send(todo);
+        }
+        res.status(200).send({todo});
+    }, (err) => {
+        console.log(`Error in fetching Todo by ID in err `, err);
+        res.status(400).send(err);
+    }).catch((err) => {
+        console.log(`Error in fetching Todo by ID in catch`, err);
+
+        res.status(400).send(err);
+    });
 })
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
