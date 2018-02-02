@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-let Schema = mongoose.Schema;
-let userSchema = new Schema({
+const Schema = mongoose.Schema;
+const userSchema = new Schema({
     email: {
         type: String,
         required: true,
@@ -8,6 +8,6 @@ let userSchema = new Schema({
         minlength: 1
     }
 });
-let User = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema);
 
 module.exports = { User };

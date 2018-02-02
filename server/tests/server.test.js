@@ -3,7 +3,7 @@ const request = require('supertest');
 const { app } = require('./../server');
 const { Todo } = require('./../models/todo');
 const { User } = require('./../models/user');
-let { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 
 const todos = [{
     _id: new ObjectId(),
