@@ -147,3 +147,48 @@ describe('DELETE /todos/id', () => {
             .end(done);
     });
 });
+
+describe('PATCH /todos/:id', () => {
+    it('should update a existing todo', (done) => {
+        var id = todos[0]._id.toHexString();
+        var completed = true;
+        var text = "Hello this is text update"
+        request(app)
+            .patch(`/todos/${id}`)
+            .send({ completed, text })
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(text);
+                expect(res.body.todo.completed).toBe(true);
+                expect(typeof(res.body.todo.completedAt)).toBe("number");
+            })
+            .end(done);
+    });
+
+    it('should clear completedAt when todo is not completed', (done) => {
+        var id = todos[0]._id.toHexString();
+        var completed = false;
+        var text = "Hello this is text update"
+        request(app)
+            .patch(`/todos/${id}`)
+            .send({ completed, text })
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(text);
+                expect(res.body.todo.completed).toBe(false);
+                expect(res.body.todo.completedAt).toBe(null);
+            })
+            .end(done);
+    });
+
+    it('Should return a 404 when Id is invalid', (done) => {
+        var id = '124454';
+        var completed = false;
+        request(app)
+            .patch(`/todos/${id}`)
+            .send({ completed})
+            .expect(404)
+            .end(done);
+    });
+
+})
