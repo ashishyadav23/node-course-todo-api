@@ -60,14 +60,15 @@ app.get('/todos/:id', (req, res) => {
 app.delete('/todos/:id', (req, res) => {
     var id = req.params.id;
     if (!ObjectId.isValid(id)) {
-        return res.status(404).send({"message":'Invalid ID'});
+        return res.status(404).send({ "message": 'Invalid ID' });
     }
 
-    Todo.findByIdAndRemove(id).then((result) => {
-        if (!result) {
-            return res.status(200).send({"result":[]});
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if (!todo) {
+            return res.status(400).send({ "todo": [] });
         }
-        res.status(200).send(result);
+        console.log("test",todo);
+        res.status(200).send({ todo });
     }, (err) => {
         return res.status(400).send(err);
     }).catch((err) => {
