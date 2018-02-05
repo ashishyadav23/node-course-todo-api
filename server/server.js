@@ -7,7 +7,7 @@ const _ = require("lodash");
 const { mongoose } = require('./db/mongoose');
 const { Todo } = require('./models/todo');
 const { User } = require('./models/user');
-const {authenticate} = require('./middleware/authenticate');
+const { authenticate } = require('./middleware/authenticate');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -35,6 +35,7 @@ app.get('/todos', (req, res) => {
         res.status(400).send(err);
     })
 });
+
 
 app.get('/todos/:id', (req, res) => {
     let id = req.params.id;
@@ -102,6 +103,16 @@ app.patch('/todos/:id', (req, res) => {
         res.send(400).send(err);
     }).catch((err) => {
         res.send(400).send(err);
+    })
+});
+
+app.get('/users', (req, res) => {
+    User.find().then((users) => {
+        res.send({
+            users
+        })
+    }, (err) => {
+        res.status(400).send(err);
     })
 });
 
