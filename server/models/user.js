@@ -97,7 +97,16 @@ userSchema.statics.findByCredential = function (email, password) {
         })
 
     })
-}
+};
+userSchema.methods.removeToken = function (token) {
+    var user = this;
+
+    return user.update({
+        $pull: {
+            tokens: { token }
+        }
+    });
+};
 const User = mongoose.model('user', userSchema);
 
 module.exports = { User };

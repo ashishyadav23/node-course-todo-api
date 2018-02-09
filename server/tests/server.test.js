@@ -5,6 +5,7 @@ const { Todo } = require('./../models/todo');
 const { User } = require('./../models/user');
 const { ObjectId } = require('mongodb');
 const { todos, populateTodos, users, populateUsers } = require('./seed/seed');
+const _ = require('lodash');
 
 beforeEach(populateUsers);
 beforeEach(populateTodos);
@@ -252,5 +253,56 @@ describe('POST /users', () => {
             .expect(400)
             .end(done);
     });
-})
+});
+
+describe('POST /users/login', () => {
+    it('should login user and return token', (done) => {
+        var email = users[0].email;
+        var password = users[0].password;
+        request(app)
+            .post('/users/login')
+            .send({ email, password })
+            .expect(200)
+            .expect((res) => {
+                expect(res.headers['x-auth']).toBeTruthy();
+            })
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+
+                User.findById(users[0]._id).then((user) => {
+                    console.log("tokens", user.tokens[0]);
+                    done();
+                }).catch((err) => {
+                    done(err);
+                });
+            });
+    });
+});
+
+describe('DELETE /users/me/token', () => {
+    it('should remove auth token on logout', (done) => {
+        request(app)
+            .delete('/users/me/token')
+            .set('x-auth', users[0].tokens[0].token)
+            .expect(200)
+            .expect((res) => {
+                expect(res.headers['x-auth']).toBeTruthy();
+            })
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+
+                User.findById(users[0]._id).then((user) => {
+                    console.log(user);
+                    expect(user.token.length).toBe(0);
+                    done();
+                }).catch((err) => {
+                    done(err);
+                });
+            });
+    });
+});
 
