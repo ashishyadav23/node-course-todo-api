@@ -2,7 +2,7 @@ const { SHA256 } = require('crypto-js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-var pass = "abc123";
+var pass = process.env.JWT_SECRET;
 // bcrypt.genSalt(10, (err, salt) => {
 //     bcrypt.hash(pass, salt, (error, hash) => {
 //         console.log("Pass hash", hash);
